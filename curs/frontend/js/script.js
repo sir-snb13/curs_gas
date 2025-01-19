@@ -1,4 +1,7 @@
-ymaps.ready(init); // Запускаем функцию после загрузки API
+ymaps.ready(init);
+
+let badStationsGeoObjects = [];
+let goodStationsGeoObjects = [];
 
 function init() {
     var map = new ymaps.Map("map", {
@@ -17,14 +20,12 @@ function init() {
         .then(data => {
             console.log("Данные с сервера (плохие заправки):", data);
 
-            var geoObjects = []; // Массив для хранения меток
+            // Очищаем массив плохих заправок
+            badStationsGeoObjects = [];
 
             data.forEach(station => {
-                console.log("Обрабатываем заправку (плохая):", station);
-
                 if (Array.isArray(station.coordinates) && station.coordinates.length === 2) {
                     const [longitude, latitude] = station.coordinates.map(coord => parseFloat(coord));
-                    console.log("Преобразованные координаты:", longitude, latitude);
 
                     if (!isNaN(longitude) && !isNaN(latitude)) {
                         var placemark = new ymaps.Placemark([latitude, longitude], {
@@ -35,26 +36,12 @@ function init() {
                             iconColor: '#ff0000' // Красный для плохих заправок
                         });
 
-                        geoObjects.push(placemark); // Добавляем метку в список
-
-                    } else {
-                        console.warn("Некорректные координаты:", station.coordinates);
+                        badStationsGeoObjects.push(placemark); // Добавляем метку в список плохих заправок
                     }
-                } else {
-                    console.warn("Заправка без координат или с неверным форматом координат:", station);
                 }
             });
 
-            // Добавляем все метки на карту
-            geoObjects.forEach(placemark => map.geoObjects.add(placemark));
-
-            // Автоматически центрируем карту и изменяем масштаб, чтобы все метки были видны
-            if (geoObjects.length > 0) {
-                map.setBounds(map.geoObjects.getBounds(), {
-                    checkZoomRange: true
-                });
-            }
-
+            updateMap(); // Обновляем карту в соответствии с выбранными фильтрами
         })
         .catch(error => console.error('Ошибка загрузки данных (плохие заправки):', error));
 
@@ -69,14 +56,12 @@ function init() {
         .then(data => {
             console.log("Данные с сервера (хорошие заправки):", data);
 
-            var geoObjects = []; // Массив для хранения меток
+            // Очищаем массив хороших заправок
+            goodStationsGeoObjects = [];
 
             data.forEach(station => {
-                console.log("Обрабатываем заправку (хорошая):", station);
-
                 if (Array.isArray(station.coordinates) && station.coordinates.length === 2) {
                     const [longitude, latitude] = station.coordinates.map(coord => parseFloat(coord));
-                    console.log("Преобразованные координаты:", longitude, latitude);
 
                     if (!isNaN(longitude) && !isNaN(latitude)) {
                         var placemark = new ymaps.Placemark([latitude, longitude], {
@@ -87,26 +72,37 @@ function init() {
                             iconColor: '#00ff00' // Зеленый для хороших заправок
                         });
 
-                        geoObjects.push(placemark); // Добавляем метку в список
-
-                    } else {
-                        console.warn("Некорректные координаты:", station.coordinates);
+                        goodStationsGeoObjects.push(placemark); // Добавляем метку в список хороших заправок
                     }
-                } else {
-                    console.warn("Заправка без координат или с неверным форматом координат:", station);
                 }
             });
 
-            // Добавляем все метки на карту
-            geoObjects.forEach(placemark => map.geoObjects.add(placemark));
-
-            // Автоматически центрируем карту и изменяем масштаб, чтобы все метки были видны
-            if (geoObjects.length > 0) {
-                map.setBounds(map.geoObjects.getBounds(), {
-                    checkZoomRange: true
-                });
-            }
-
+            updateMap(); // Обновляем карту в соответствии с выбранными фильтрами
         })
         .catch(error => console.error('Ошибка загрузки данных (хорошие заправки):', error));
+
+    // Функция для обновления карты в зависимости от состояния чекбоксов
+    function updateMap() {
+        // Сначала очищаем карту
+        map.geoObjects.removeAll();
+
+        // Добавляем только выбранные метки
+        if (document.getElementById("showBadStations").checked) {
+            badStationsGeoObjects.forEach(placemark => map.geoObjects.add(placemark));
+        }
+        if (document.getElementById("showGoodStations").checked) {
+            goodStationsGeoObjects.forEach(placemark => map.geoObjects.add(placemark));
+        }
+
+        // Автоматически центрируем карту и изменяем масштаб, чтобы все метки были видны
+        if (map.geoObjects.getLength() > 0) {
+            map.setBounds(map.geoObjects.getBounds(), {
+                checkZoomRange: true
+            });
+        }
+    }
+
+    // Обработчики событий для чекбоксов, чтобы обновить карту при изменении фильтров
+    document.getElementById("showBadStations").addEventListener("change", updateMap);
+    document.getElementById("showGoodStations").addEventListener("change", updateMap);
 }
