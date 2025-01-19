@@ -1,0 +1,14 @@
+/* Стили для страницы с картой */
+#map {
+    width: 80%;
+    height: 500px;
+    margin: 20px auto;
+    border: 5px solid #d3c4a1;
+    border-radius: 15px;
+}
+
+/* Заголовок карты */
+main h2 {
+    font-size: 32px;
+    color: #5f5a3f;
+}

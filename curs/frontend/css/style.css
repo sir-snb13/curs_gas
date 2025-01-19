@@ -1,80 +1,73 @@
-/* Стили для всей страницы */
+/* Общие стили для страницы */
 body {
     font-family: Arial, sans-serif;
     background-color: #fdf4d9; /* Постельно желтый */
     margin: 0;
     padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Обеспечивает высоту на весь экран */
 }
 
-/* Заголовок */
 header {
     background-color: #f1c231; /* Цвет фона хедера */
-    padding: 20px 0;
+    padding: 20px;
     text-align: center;
-    color: #5f5a3f; /* Цвет заголовка */
+    color: #5f5a3f;
     font-size: 24px;
     font-weight: bold;
 }
 
-/* Основной контейнер для страницы */
+header nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+header nav ul li {
+    display: inline;
+    margin: 0 15px;
+}
+
+header nav ul li a {
+    text-decoration: none;
+    color: #5f5a3f;
+}
+
 main {
-    display: flex;
-    justify-content: center;
     padding: 20px;
-    flex-direction: column; /* Размещение элементов по вертикали */
-    align-items: center;
+    text-align: center;
+    flex: 1; /* Заставляет основной контент занимать всё доступное пространство */
 }
 
-/* Рамка для карты */
-#map {
-    width: 1500px; /* Фиксированная ширина */
-    height: 1200px; /* Фиксированная высота */
-    border: 5px solid #d3c4a1; /* Цвет рамки */
-    border-radius: 15px; /* Округление углов */
-}
-
-/* Стили для чекбоксов */
-.custom-checkbox input {
-    display: none;
-}
-
-.custom-checkbox .checkbox-label {
-    position: relative;
-    padding-left: 30px;
-    cursor: pointer;
-    font-size: 18px;
-    color: #5f5a3f; /* Цвет текста */
-    margin-right: 30px; /* Отступ между чекбоксами */
-    margin-top: 10px;
-}
-
-.custom-checkbox .checkbox-label::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 20px;
-    height: 20px;
-    background-color: #f0f0f0;
-    border-radius: 4px;
-    border: 2px solid #bbb;
-    transition: all 0.3s ease;
-}
-
-.custom-checkbox input:checked + .checkbox-label::before {
+footer {
     background-color: #f1c231;
-    border-color: #f1c231;
-    box-shadow: 0 0 0 4px rgba(241, 194, 49, 0.3);
+    text-align: center;
+    padding: 10px;
+    color: #5f5a3f;
+    position: relative;
 }
 
-.custom-checkbox input:checked + .checkbox-label {
-    font-weight: 700;
+/* Ссылки в футере */
+footer a {
+    text-decoration: none;
+    color: #5f5a3f;
 }
 
-/* Контейнер для чекбоксов */
-.checkbox-container {
-    margin-top: 20px;
-    display: flex;
-    justify-content: center;
-    gap: 30px;
+footer p {
+    margin: 10px 0;
+}
+
+/* Стили для карты */
+#map {
+    width: 80%;
+    height: 500px;
+    margin: 20px auto;
+    border: 5px solid #d3c4a1;
+    border-radius: 15px;
+}
+
+/* Стили для основного контента */
+main h2 {
+    font-size: 32px;
+    color: #5f5a3f;
 }

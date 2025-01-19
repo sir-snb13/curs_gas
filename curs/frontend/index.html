@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,24 +9,30 @@
 </head>
 <body>
     <header>
-        <h1>Интерактивная карта заправок</h1>
+        <h1>Заправки Москвы</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Главная</a></li>
+                <li><a href="map.html">Карта</a></li>
+            </ul>
+        </nav>
     </header>
     <main>
-        <!-- Карта -->
-        <div id="map" style="width: 1500px; height: 1200px;"></div>
-
-        <!-- Чекбоксы для фильтров -->
-        <div class="checkbox-container">
-            <label class="custom-checkbox">
-                <input type="checkbox" id="showBadStations" checked>
-                <span class="checkbox-label">Плохие заправки</span>
-            </label>
-            <label class="custom-checkbox">
-                <input type="checkbox" id="showGoodStations" checked>
-                <span class="checkbox-label">Хорошие заправки</span>
-            </label>
-        </div>
+        <section>
+            <h2>О проекте</h2>
+            <p>Данный проект представляет собой интерактивную карту заправок Москвы. Вы можете просматривать как хорошие, так и плохие заправки на карте, а также фильтровать их по типу. Данные для карты получены из открытых источников, доступных через платформу Мос.ру.</p>
+        </section>
+        
+        <section>
+            <h3>Источники данных:</h3>
+            <ul>
+                <li><a href="https://data.mos.ru/opendata/754?isDynamic=false" target="_blank">Датасет с плохими заправками</a></li>
+                <li><a href="https://data.mos.ru/opendata/753?pageSize=20&pageIndex=0&isDynamic=false" target="_blank">Датасет с хорошими заправками</a></li>
+            </ul>
+        </section>
     </main>
-    <script src="js/script.js"></script>
+    <footer>
+        <p>&copy; 2025 Заправки Москвы. Все права защищены.</p>
+    </footer>
 </body>
 </html>
