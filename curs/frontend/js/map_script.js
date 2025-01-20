@@ -9,79 +9,85 @@ function init() {
         zoom: 10
     });
 
-    // Загружаем данные для плохих заправок
-    fetch('/curs/backend/api/get_bad_stations.php')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log("Данные с сервера (плохие заправки):", data);
-
-            // Очищаем массив плохих заправок
-            badStationsGeoObjects = [];
-
-            data.forEach(station => {
-                if (Array.isArray(station.coordinates) && station.coordinates.length === 2) {
-                    const [longitude, latitude] = station.coordinates.map(coord => parseFloat(coord));
-
-                    if (!isNaN(longitude) && !isNaN(latitude)) {
-                        var placemark = new ymaps.Placemark([latitude, longitude], {
-                            balloonContentHeader: station.name,
-                            balloonContentBody: station.address
-                        }, {
-                            preset: 'islands#icon',
-                            iconColor: '#ff0000' // Красный для плохих заправок
-                        });
-
-                        badStationsGeoObjects.push(placemark); // Добавляем метку в список плохих заправок
-                    }
+    // Функция для загрузки заправок с фильтрацией по округу
+    function loadStations(district) {
+        // Загружаем данные для плохих заправок с учетом округа
+        fetch(`/curs/backend/api/get_bad_stations.php?district=${district}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
                 }
-            });
+                return response.json();
+            })
+            .then(data => {
+                console.log("Данные с сервера (плохие заправки):", data);
 
-            updateMap(); // Обновляем карту в соответствии с выбранными фильтрами
-        })
-        .catch(error => console.error('Ошибка загрузки данных (плохие заправки):', error));
+                // Очищаем массив плохих заправок
+                badStationsGeoObjects = [];
 
-    // Загружаем данные для хороших заправок
-    fetch('/curs/backend/api/get_good_stations.php')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log("Данные с сервера (хорошие заправки):", data);
+                data.forEach(station => {
+                    if (Array.isArray(station.coordinates) && station.coordinates.length === 2) {
+                        const [longitude, latitude] = station.coordinates.map(coord => parseFloat(coord));
 
-            // Очищаем массив хороших заправок
-            goodStationsGeoObjects = [];
+                        if (!isNaN(longitude) && !isNaN(latitude)) {
+                            var placemark = new ymaps.Placemark([latitude, longitude], {
+                                balloonContentHeader: station.name,
+                                balloonContentBody: station.address
+                            }, {
+                                preset: 'islands#icon',
+                                iconColor: '#ff0000' // Красный для плохих заправок
+                            });
 
-            data.forEach(station => {
-                if (Array.isArray(station.coordinates) && station.coordinates.length === 2) {
-                    const [longitude, latitude] = station.coordinates.map(coord => parseFloat(coord));
-
-                    if (!isNaN(longitude) && !isNaN(latitude)) {
-                        var placemark = new ymaps.Placemark([latitude, longitude], {
-                            balloonContentHeader: station.name,
-                            balloonContentBody: station.address
-                        }, {
-                            preset: 'islands#icon',
-                            iconColor: '#00ff00' // Зеленый для хороших заправок
-                        });
-
-                        goodStationsGeoObjects.push(placemark); // Добавляем метку в список хороших заправок
+                            badStationsGeoObjects.push(placemark);
+                        }
                     }
+                });
+
+                updateMap();
+            })
+            .catch(error => console.error('Ошибка загрузки данных (плохие заправки):', error));
+
+        // Загружаем данные для хороших заправок с учетом округа
+        fetch(`/curs/backend/api/get_good_stations.php?district=${district}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
                 }
-            });
+                return response.json();
+            })
+            .then(data => {
+                console.log("Данные с сервера (хорошие заправки):", data);
 
-            updateMap(); // Обновляем карту в соответствии с выбранными фильтрами
-        })
-        .catch(error => console.error('Ошибка загрузки данных (хорошие заправки):', error));
+                // Очищаем массив хороших заправок
+                goodStationsGeoObjects = [];
 
-    // Функция для обновления карты в зависимости от состояния чекбоксов
+                data.forEach(station => {
+                    if (Array.isArray(station.coordinates) && station.coordinates.length === 2) {
+                        const [longitude, latitude] = station.coordinates.map(coord => parseFloat(coord));
+
+                        if (!isNaN(longitude) && !isNaN(latitude)) {
+                            var placemark = new ymaps.Placemark([latitude, longitude], {
+                                balloonContentHeader: station.name,
+                                balloonContentBody: station.address
+                            }, {
+                                preset: 'islands#icon',
+                                iconColor: '#00ff00' // Зеленый для хороших заправок
+                            });
+
+                            goodStationsGeoObjects.push(placemark);
+                        }
+                    }
+                });
+
+                updateMap();
+            })
+            .catch(error => console.error('Ошибка загрузки данных (хорошие заправки):', error));
+    }
+
+    // Загружаем данные для всех заправок при первой загрузке страницы
+    loadStations('all');
+
+    // Функция для обновления карты в зависимости от состояния фильтров
     function updateMap() {
         // Сначала очищаем карту
         map.geoObjects.removeAll();
@@ -102,7 +108,13 @@ function init() {
         }
     }
 
-    // Обработчики событий для чекбоксов, чтобы обновить карту при изменении фильтров
+    // Обработчики событий для чекбоксов
     document.getElementById("showBadStations").addEventListener("change", updateMap);
     document.getElementById("showGoodStations").addEventListener("change", updateMap);
+
+    // Обработчик события для выбора округа
+    document.getElementById("district-select").addEventListener("change", function() {
+        const selectedDistrict = this.value;
+        loadStations(selectedDistrict);
+    });
 }
