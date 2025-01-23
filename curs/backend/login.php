@@ -1,14 +1,12 @@
 <?php
-session_save_path("C:/xampp/htdocs/curs/sessions");  // Указываем полный путь для хранения сессий
-session_start();  // Запуск сессии
+session_save_path("C:/xampp/htdocs/curs/sessions");  
+session_start(); 
 
-require_once 'db.php';  // Подключение к базе данных
+require_once 'db.php';  
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = $_POST['username'];
-    $password = $_POST['password'];
-
-    // Проверяем, есть ли такой пользователь в базе данных
+    $password = $_POST['password']; 
     $sql = "SELECT * FROM users WHERE username = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $username);
@@ -17,20 +15,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($result->num_rows > 0) {
         $user = $result->fetch_assoc();
-        // Проверяем, совпадает ли введенный пароль с паролем в базе данных
-        if ($password === $user['password']) {
-            // Устанавливаем сессионные переменные
+        if (password_verify($password, $user['password'])) { 
+
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['username'] = $user['username'];
 
-            // Перенаправляем на главную страницу
-            header("Location: /curs/frontend/index.php");  // Путь с учетом структуры проекта
+            header("Location: /curs/frontend/index.php");  
             exit();
         } else {
-            echo "Неверный пароль!";
+            header("Location: /curs/frontend/login.php?error=invalid_password");
+            exit();
         }
     } else {
-        echo "Пользователь не найден!";
+        header("Location: /curs/frontend/login.php?error=user_not_found");
+        exit();
     }
 }
 ?>

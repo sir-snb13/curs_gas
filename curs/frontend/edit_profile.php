@@ -1,14 +1,25 @@
 <?php
-session_save_path("C:/xampp/htdocs/curs/sessions");  
-session_start();  
+session_save_path("C:/xampp/htdocs/curs/sessions");
+session_start();
+
+require_once '../backend/db.php';
 
 $error_message = "";
 if (isset($_GET['error'])) {
-    if ($_GET['error'] === 'invalid_password') {
-        $error_message = "Неверный пароль!";
-    } elseif ($_GET['error'] === 'user_not_found') {
-        $error_message = "Пользователь не найден!";
+    if ($_GET['error'] === 'username_taken') {
+        $error_message = "Это имя пользователя уже занято!";
     }
+}
+
+$user_id = $_SESSION['user_id'];
+$sql = "SELECT * FROM users WHERE id = $user_id";
+$result = $conn->query($sql);
+
+if ($result->num_rows > 0) {
+    $user = $result->fetch_assoc();
+} else {
+    header("Location: /curs/frontend/index.php");
+    exit();
 }
 ?>
 
@@ -17,9 +28,9 @@ if (isset($_GET['error'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Вход</title>
+    <title>Редактирование профиля</title>
     <link rel="stylesheet" href="/curs/frontend/css/style.css">
-    <link rel="stylesheet" href="/curs/frontend/css/reg.css"><!-- Include log.css -->
+    <link rel="stylesheet" href="/curs/frontend/css/edit_profile.css"> <!-- Include custom CSS -->
 </head>
 <body>
     <header>
@@ -40,20 +51,23 @@ if (isset($_GET['error'])) {
             </ul>
         </nav>
     </header>
-    
+
     <main>
-        <h2>Вход</h2>
-        <form action="/curs/backend/login.php" method="POST">
+        <h2>Редактировать профиль</h2>
+        <form action="/curs/backend/update_profile.php" method="POST">
             <label for="username">Имя пользователя:</label>
-            <input type="text" id="username" name="username" required><br><br>
+            <input type="text" id="username" name="username" value="<?php echo htmlspecialchars($user['username']); ?>" required><br><br>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($user['email']); ?>" required><br><br>
 
             <label for="password">Пароль:</label>
-            <input type="password" id="password" name="password" required><br><br>
+            <input type="password" id="password" name="password" placeholder="Оставьте пустым, если не хотите менять"><br><br>
 
-            <button type="submit">Войти</button>
+            <button type="submit">Сохранить изменения</button>
         </form>
     </main>
-    <!-- Custom Modal -->
+
     <div id="errorModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
@@ -62,7 +76,6 @@ if (isset($_GET['error'])) {
         </div>
     </div>
 
-    <!-- Footer -->
     <footer>
         <p>© 2025 Заправки Москвы. Все права защищены</p>
     </footer>
@@ -74,7 +87,6 @@ if (isset($_GET['error'])) {
         <?php if ($error_message): ?>
             modal.style.display = "block";
         <?php endif; ?>
-
 
         var span = document.getElementsByClassName("close")[0];
 

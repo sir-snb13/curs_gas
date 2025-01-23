@@ -1,31 +1,51 @@
 <?php
 session_start();
 
-// Проверяем, авторизован ли пользователь
 if (!isset($_SESSION['user_id'])) {
-    header("Location: curs/frontend/login.html");  // Перенаправляем на страницу входа
+    header("Location: /curs/frontend/login.html"); 
     exit();
 }
 
 require_once 'db.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $FullName = $_POST['FullName'];
-    $Address = $_POST['Address'];
-    $AdmArea = $_POST['AdmArea'];
-    $District = $_POST['District'];
+    // Получаем данные из формы
+    $FullName = $conn->real_escape_string($_POST['FullName']);
+    $ShortName = $conn->real_escape_string($_POST['ShortName']);
+    $AdmArea = $conn->real_escape_string($_POST['AdmArea']);
+    $District = $conn->real_escape_string($_POST['District']);
+    $Address = $conn->real_escape_string($_POST['Address']);
+    $Owner = $conn->real_escape_string($_POST['Owner']);
+    $TestDate = $conn->real_escape_string($_POST['TestDate']);
     $geoData = $_POST['geoData'];
+    if (!empty($geoData)) {
+        $coordinates = explode(',', $geoData);
+        
+        if (count($coordinates) === 2) {
+            $latitude = trim($coordinates[0]);
+            $longitude = trim($coordinates[1]);
 
-    // Вставляем данные о хорошей заправке в базу данных
-    $sql = "INSERT INTO good_gas_stations (FullName, Address, AdmArea, District, geoData) 
-            VALUES (?, ?, ?, ?, ?)";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("sssss", $FullName, $Address, $AdmArea, $District, $geoData);
-
-    if ($stmt->execute()) {
-        echo "Хорошая заправка успешно добавлена!";
+            if (is_numeric($latitude) && is_numeric($longitude)) {
+                $geoDataFormatted = '{coordinates=[' . (float)$longitude . ', ' . (float)$latitude . '], type=Point}';
+            } else {
+                die("Invalid coordinates format. Please enter latitude and longitude as numbers.");
+            }
+        } else {
+            die("Please provide both latitude and longitude, separated by a comma.");
+        }
     } else {
-        echo "Ошибка при добавлении заправки!";
+        die("GeoData is required.");
     }
-}
+
+    $geodata_center = $geoDataFormatted;
+
+    $sql = "INSERT INTO good_gas_stations (FullName, ShortName, AdmArea, District, Address, Owner, TestDate, geoData, geodata_center)
+            VALUES ('$FullName', '$ShortName', '$AdmArea', '$District', '$Address', '$Owner', '$TestDate', '$geoDataFormatted', '$geodata_center')";
+
+    if ($conn->query($sql)) {
+        header("Location: /curs/frontend/map.php");
+        exit();
+    } else {
+        echo "Ошибка при добавлении заправки: " . $conn->error;
+    }
 ?>

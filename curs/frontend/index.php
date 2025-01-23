@@ -1,6 +1,6 @@
 <?php
-session_save_path("C:/xampp/htdocs/curs/sessions");  // Указываем путь к папке для сессий
-session_start();  // Стартуем сессию
+session_save_path("C:/xampp/htdocs/curs/sessions");  
+session_start();  
 ?>
 
 
@@ -17,14 +17,13 @@ session_start();  // Стартуем сессию
     <header>
         <h1>Заправки Москвы</h1>
         <nav>
-        <ul>
+            <ul>
                 <li><a href="/curs/frontend/index.php">Главная</a></li>
                 <li><a href="/curs/frontend/map.php">Карта</a></li>
-
-                <!-- Условие, чтобы показывать пункты только если пользователь авторизован -->
                 <?php if (isset($_SESSION['user_id'])): ?>
                     <li><a href="/curs/frontend/add_good_station.php">Добавить хорошую заправку</a></li>
                     <li><a href="/curs/frontend/add_bad_station.php">Добавить плохую заправку</a></li>
+                    <li><a href="/curs/frontend/edit_profile.php">Редактировать профиль</a></li>
                     <li><a href="/curs/backend/logout.php">Выйти</a></li>
                 <?php else: ?>
                     <li><a href="/curs/frontend/register.php">Регистрация</a></li>

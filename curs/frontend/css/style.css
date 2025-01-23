@@ -14,40 +14,81 @@ header {
     padding: 20px;
     text-align: center;
     color: #5f5a3f;
-    font-size: 24px;
+    font-size: 28px; /* Увеличен шрифт */
     font-weight: bold;
 }
 
 header nav ul {
     list-style: none;
     padding: 0;
+    margin-top: 10px; /* Добавляем немного отступа сверху */
 }
 
 header nav ul li {
-    display: inline;
+    display: inline-block;
     margin: 0 15px;
 }
 
 header nav ul li a {
     text-decoration: none;
     color: #5f5a3f;
+    font-size: 18px; /* Увеличиваем размер шрифта ссылок */
+    transition: color 0.3s ease; /* Плавный переход для изменения цвета */
+}
+
+header nav ul li a:hover {
+    color: #d3c4a1; /* Цвет при наведении */
 }
 
 main {
-    padding: 20px;
-    text-align: center;
+    padding: 30px 20px; /* Увеличим отступы для лучшего восприятия */
+    text-align: left; /* Текст будет выровнен по левому краю */
     flex: 1; /* Заставляет основной контент занимать всё доступное пространство */
+    max-width: 900px; /* Максимальная ширина для контента */
+    margin: 0 auto; /* Центрируем контент */
+}
+
+main h2 {
+    font-size: 36px; /* Увеличен размер заголовка */
+    color: #5f5a3f;
+    margin-bottom: 20px; /* Добавляем отступ снизу */
+}
+
+main p {
+    font-size: 18px; /* Увеличиваем размер шрифта для параграфов */
+    line-height: 1.6; /* Увеличим межстрочный интервал для лучшего восприятия */
+    margin-bottom: 20px; /* Отступ снизу */
+}
+
+main ul {
+    list-style: none;
+    padding: 0;
+    margin-left: 0;
+}
+
+main ul li {
+    font-size: 18px;
+    margin-bottom: 10px; /* Добавляем отступ между пунктами */
+}
+
+main ul li a {
+    text-decoration: none;
+    color: #5f5a3f;
+    transition: color 0.3s ease;
+}
+
+main ul li a:hover {
+    color: #f1c231; /* Цвет при наведении */
 }
 
 footer {
     background-color: #f1c231;
     text-align: center;
-    padding: 10px;
+    padding: 15px;
     color: #5f5a3f;
     position: relative;
 }
 
-/* Ссылки в футере */
 footer a {
     text-decoration: none;
     color: #5f5a3f;
@@ -55,16 +96,11 @@ footer a {
 
 footer p {
     margin: 10px 0;
+    font-size: 16px; /* Немного уменьшили шрифт */
 }
 
 /* Стили для карты */
-#map {
-    width: 80%;
-    height: 500px;
-    margin: 20px auto;
-    border: 5px solid #d3c4a1;
-    border-radius: 15px;
-}
+
 
 /* Стили для основного контента */
 main h2 {
@@ -72,32 +108,57 @@ main h2 {
     color: #5f5a3f;
 }
 
-/* Стили для формы */
+/* Стили для ссылок */
+a {
+    color: #5f5a3f;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #f1c231;
+}
+/* Form container style */
 form {
-    max-width: 600px;
+    width: 350px; /* Ensure consistent width */
     margin: 0 auto;
+    padding: 30px;
     background-color: #fff;
-    padding: 20px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Increased shadow for more prominent border */
+    border: 3px solid #d3c4a1;  /* Solid border around the form */
 }
 
+/* Input fields style */
 input[type="text"], input[type="email"], input[type="password"] {
-    width: 100%;
-    padding: 10px;
-    margin: 5px 0 15px;
+    width: 90%; /* Ensure inputs span full width */
+    padding: 12px;
+    margin: 15px 0; /* Space between fields */
     border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: 5px;
+    font-size: 16px;
 }
 
+/* Focused input field style */
+input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focus {
+    border-color: #4CAF50; /* Green border on focus */
+    outline: none;
+}
+
+/* Button style */
 button {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px 20px;
+    width: 100%; /* Ensure button spans the full width */
+    padding: 12px;
+    background-color: #f1c231;  /* Soft yellow background */
+    color: #5f5a3f;  /* Darker text color */
     border: none;
-    border-radius: 4px;
+    border-radius: 5px;
+    font-size: 16px;
     cursor: pointer;
 }
 
 button:hover {
-    background-color: #45a049;
+    background-color: #d3c4a1;  /* Light brown when hovered */
 }
+
+
+

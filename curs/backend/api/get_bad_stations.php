@@ -3,19 +3,17 @@ require_once '../db.php';
 
 header('Content-Type: application/json');
 
-// Получаем параметр округа из запроса (если передан)
 $district = isset($_GET['district']) ? $_GET['district'] : 'all';
 
-// Формируем SQL-запрос
-$sql = "SELECT id, FullName AS name, Address AS address, geodata_center AS coordinates 
-        FROM bad_gas_stations"; // Исправили поле таблицы
+$sql = "SELECT id, FullName AS name, Address AS address, geoData AS coordinates, Violations AS violations 
+        FROM bad_gas_stations";
 
 if ($district !== 'all') {
-    // Добавляем фильтрацию по округу
-    $sql .= " WHERE AdmArea LIKE '%$district%'"; // Учитываем поле AdmArea
+
+    $sql .= " WHERE AdmArea LIKE '%$district%'";
 }
 
-// Выполняем запрос
+
 $result = $conn->query($sql);
 
 $stations = [];
@@ -35,6 +33,10 @@ if ($result->num_rows > 0) {
         } else {
             $row['coordinates'] = null;
         }
+        
+        // Добавляем проверки для Violations
+        $row['violations'] = !empty($row['violations']) ? $row['violations'] : 'Нет данных';
+
         $stations[] = $row;
     }
 }

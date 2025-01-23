@@ -1,6 +1,6 @@
 /* Стили для страницы с картой */
 #map {
-    width: 80%;
+    width: 1000px;
     height: 500px;
     margin: 20px auto;
     border: 5px solid #d3c4a1;

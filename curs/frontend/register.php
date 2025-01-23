@@ -1,7 +1,15 @@
 <?php
-session_save_path("C:/xampp/htdocs/curs/sessions");  // Указываем путь к папке для сессий
-session_start();  // Стартуем сессию
+session_save_path("C:/xampp/htdocs/curs/sessions"); 
+session_start(); 
+
+$error_message = "";
+if (isset($_GET['error'])) {
+    if ($_GET['error'] === 'username_exists') {
+        $error_message = "Пользователь с таким именем уже существует!";
+    }
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -9,6 +17,7 @@ session_start();  // Стартуем сессию
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Регистрация</title>
     <link rel="stylesheet" href="/curs/frontend/css/style.css">
+    <link rel="stylesheet" href="/curs/frontend/css/reg.css"> <!-- Include reg.css -->
 </head>
 <body>
     <header>
@@ -17,11 +26,10 @@ session_start();  // Стартуем сессию
             <ul>
                 <li><a href="/curs/frontend/index.php">Главная</a></li>
                 <li><a href="/curs/frontend/map.php">Карта</a></li>
-
-                <!-- Условие, чтобы показывать пункты только если пользователь авторизован -->
                 <?php if (isset($_SESSION['user_id'])): ?>
                     <li><a href="/curs/frontend/add_good_station.php">Добавить хорошую заправку</a></li>
                     <li><a href="/curs/frontend/add_bad_station.php">Добавить плохую заправку</a></li>
+                    <li><a href="/curs/frontend/edit_profile.php">Редактировать профиль</a></li>
                     <li><a href="/curs/backend/logout.php">Выйти</a></li>
                 <?php else: ?>
                     <li><a href="/curs/frontend/register.php">Регистрация</a></li>
@@ -47,10 +55,37 @@ session_start();  // Стартуем сессию
         </form>
     </main>
 
+    <div id="errorModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2><?php echo $error_message; ?></h2>
+            <button class="modal-button" onclick="closeModal()">OK</button>
+        </div>
+    </div>
+
     <footer>
         <p>© 2025 Заправки Москвы. Все права защищены</p>
     </footer>
 
-    <script src="/curs/frontend/js/script.js"></script>
+    <script>
+        var modal = document.getElementById("errorModal");
+
+        <?php if ($error_message): ?>
+            modal.style.display = "block";
+        <?php endif; ?>
+        var span = document.getElementsByClassName("close")[0];
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+        function closeModal() {
+            modal.style.display = "none";
+        }
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
+
 </body>
 </html>

@@ -7,7 +7,7 @@ header('Content-Type: application/json');
 $district = isset($_GET['district']) ? $_GET['district'] : 'all';
 
 // Формируем SQL-запрос
-$sql = "SELECT id, FullName AS name, Address AS address, geodata_center AS coordinates 
+$sql = "SELECT id, FullName AS name, Address AS address, District as district, geoData AS coordinates 
         FROM good_gas_stations"; // Исправили поле таблицы
 
 if ($district !== 'all') {
