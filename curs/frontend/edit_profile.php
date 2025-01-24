@@ -33,13 +33,15 @@ if ($result->num_rows > 0) {
     <link rel="stylesheet" href="/curs/frontend/css/edit_profile.css"> <!-- Include custom CSS -->
 </head>
 <body>
-    <header>
+<header>
         <h1>Заправки Москвы</h1>
         <nav>
             <ul>
                 <li><a href="/curs/frontend/index.php">Главная</a></li>
                 <li><a href="/curs/frontend/map.php">Карта</a></li>
+
                 <?php if (isset($_SESSION['user_id'])): ?>
+                    <li><a href="/curs/frontend/user_map.php">Карта с пользовательскими заправками</a></li>
                     <li><a href="/curs/frontend/add_good_station.php">Добавить хорошую заправку</a></li>
                     <li><a href="/curs/frontend/add_bad_station.php">Добавить плохую заправку</a></li>
                     <li><a href="/curs/frontend/edit_profile.php">Редактировать профиль</a></li>
@@ -104,6 +106,8 @@ if ($result->num_rows > 0) {
             }
         }
     </script>
+
+<script src="/curs/frontend/js/script.js"></script>
 
 </body>
 </html>

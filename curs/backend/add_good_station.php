@@ -1,10 +1,6 @@
 <?php
+session_save_path("C:/xampp/htdocs/curs/sessions");
 session_start();
-
-if (!isset($_SESSION['user_id'])) {
-    header("Location: /curs/frontend/login.html"); 
-    exit();
-}
 
 require_once 'db.php';
 
@@ -18,6 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $Owner = $conn->real_escape_string($_POST['Owner']);
     $TestDate = $conn->real_escape_string($_POST['TestDate']);
     $geoData = $_POST['geoData'];
+
     if (!empty($geoData)) {
         $coordinates = explode(',', $geoData);
         
@@ -26,21 +23,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $longitude = trim($coordinates[1]);
 
             if (is_numeric($latitude) && is_numeric($longitude)) {
-                $geoDataFormatted = '{coordinates=[' . (float)$longitude . ', ' . (float)$latitude . '], type=Point}';
+                $geoDataFormatted = '{"coordinates":[' . (float)$longitude . ', ' . (float)$latitude . '], "type":"Point"}';
             } else {
-                die("Invalid coordinates format. Please enter latitude and longitude as numbers.");
+                die("Неправильный формат координат");
             }
         } else {
-            die("Please provide both latitude and longitude, separated by a comma.");
+            die("Напишите широту и долготу через запятую");
         }
     } else {
-        die("GeoData is required.");
+        die("Данные обязательны");
     }
 
     $geodata_center = $geoDataFormatted;
 
-    $sql = "INSERT INTO good_gas_stations (FullName, ShortName, AdmArea, District, Address, Owner, TestDate, geoData, geodata_center)
-            VALUES ('$FullName', '$ShortName', '$AdmArea', '$District', '$Address', '$Owner', '$TestDate', '$geoDataFormatted', '$geodata_center')";
+    // Подготовка запроса SQL
+    $sql = "INSERT INTO user_good_gas_stations 
+            (FullName, ShortName, AdmArea, District, Address, Owner, TestDate, geoData, geodata_center, user_id)
+            VALUES ('$FullName', '$ShortName', '$AdmArea', '$District', '$Address', '$Owner', '$TestDate', 
+                    '$geoDataFormatted', '$geodata_center', {$_SESSION['user_id']})";
 
     if ($conn->query($sql)) {
         header("Location: /curs/frontend/map.php");
@@ -48,4 +48,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         echo "Ошибка при добавлении заправки: " . $conn->error;
     }
+}
 ?>

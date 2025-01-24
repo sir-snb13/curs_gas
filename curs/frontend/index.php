@@ -20,7 +20,9 @@ session_start();
             <ul>
                 <li><a href="/curs/frontend/index.php">Главная</a></li>
                 <li><a href="/curs/frontend/map.php">Карта</a></li>
+
                 <?php if (isset($_SESSION['user_id'])): ?>
+                    <li><a href="/curs/frontend/user_map.php">Карта с пользовательскими заправками</a></li>
                     <li><a href="/curs/frontend/add_good_station.php">Добавить хорошую заправку</a></li>
                     <li><a href="/curs/frontend/add_bad_station.php">Добавить плохую заправку</a></li>
                     <li><a href="/curs/frontend/edit_profile.php">Редактировать профиль</a></li>

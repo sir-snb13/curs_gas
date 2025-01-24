@@ -11,13 +11,15 @@ session_start();
     <link rel="stylesheet" href="/curs/frontend/css/style.css">
 </head>
 <body>
-    <header>
+<header>
         <h1>Заправки Москвы</h1>
         <nav>
             <ul>
                 <li><a href="/curs/frontend/index.php">Главная</a></li>
                 <li><a href="/curs/frontend/map.php">Карта</a></li>
+
                 <?php if (isset($_SESSION['user_id'])): ?>
+                    <li><a href="/curs/frontend/user_map.php">Карта с пользовательскими заправками</a></li>
                     <li><a href="/curs/frontend/add_good_station.php">Добавить хорошую заправку</a></li>
                     <li><a href="/curs/frontend/add_bad_station.php">Добавить плохую заправку</a></li>
                     <li><a href="/curs/frontend/edit_profile.php">Редактировать профиль</a></li>
@@ -38,8 +40,22 @@ session_start();
             <label for="ShortName">Короткое название:</label>
             <input type="text" id="ShortName" name="ShortName" required><br><br>
 
-            <label for="AdmArea">Административный округ:</label>
-            <input type="text" id="AdmArea" name="AdmArea" required><br><br>
+            <label for="AdmArea">Административный округ:</label><br><br>
+            <select id="AdmArea" name="AdmArea" required>
+                <option value="Центральный административный округ">Центральный</option>
+                <option value="Северный административный округ">Северный</option>
+                <option value="Северо-Восточный административный округ">Северо-Восточный</option>
+                <option value="Восточный административный округ">Восточный</option>
+                <option value="Юго-Восточный административный округ">Юго-Восточный</option>
+                <option value="Южный административный округ">Южный</option>
+                <option value="Юго-Западный административный округ">Юго-Западный</option>
+                <option value="Западный административный округ">Западный</option>
+                <option value="Северо-Западный административный округ">Северо-Западный</option>
+                <option value="Зеленоградский административный округ">Зеленоградский</option>
+                <option value="Новомосковский административный округ">Новомосковский</option>
+                <option value="Троицкий административный округ">Троицкий</option>
+            </select><br><br>
+    
 
             <label for="District">Район:</label>
             <input type="text" id="District" name="District" required><br><br>
@@ -61,5 +77,8 @@ session_start();
     </main>
 
     <script src="/curs/frontend/js/script.js"></script>
+    <footer>
+        <p>© 2025 Заправки Москвы. Все права защищены</p>
+    </footer>
 </body>
 </html>

@@ -159,6 +159,98 @@ button {
 button:hover {
     background-color: #d3c4a1;  /* Light brown when hovered */
 }
+header nav ul li a.active {
+    color: #b58900; /* Более темный оттенок для активной ссылки */
+    font-weight: bold; /* Выделение жирным */
+    border-bottom: 2px solid #b58900; /* Подчеркивание активного элемента */
+}
+/* Общие стили для мобильных устройств */
+@media (max-width: 768px) {
+    body {
+        font-size: 16px; /* Уменьшаем общий размер шрифта */
+    }
 
+    header {
+        font-size: 22px; /* Уменьшаем размер текста в заголовке */
+        padding: 15px; /* Уменьшаем отступы */
+    }
 
+    header nav ul {
+        display: flex;
+        flex-direction: column; /* Располагаем ссылки в столбик */
+        align-items: center; /* Центрируем ссылки */
+    }
 
+    header nav ul li {
+        margin: 10px 0; /* Увеличиваем вертикальный отступ между пунктами */
+    }
+
+    main {
+        padding: 20px; /* Уменьшаем отступы */
+        max-width: 100%; /* Убираем ограничение на ширину */
+    }
+
+    main h2 {
+        font-size: 28px; /* Уменьшаем размер заголовка */
+    }
+
+    main p, main ul li {
+        font-size: 16px; /* Уменьшаем размер текста */
+    }
+
+    form {
+        width: 90%; /* Уменьшаем ширину формы */
+        padding: 20px; /* Уменьшаем внутренние отступы */
+    }
+
+    input[type="text"], input[type="email"], input[type="password"] {
+        width: 100%; /* Увеличиваем ширину полей */
+        font-size: 14px; /* Уменьшаем шрифт для полей ввода */
+    }
+
+    button {
+        font-size: 14px; /* Уменьшаем шрифт кнопки */
+    }
+
+    footer {
+        font-size: 14px; /* Уменьшаем размер шрифта в подвале */
+        padding: 10px; /* Уменьшаем отступы */
+    }
+}
+
+/* Для совсем маленьких экранов */
+@media (max-width: 480px) {
+    header {
+        font-size: 18px; /* Еще меньше размер текста в заголовке */
+    }
+
+    header nav ul li a {
+        font-size: 16px; /* Уменьшаем размер текста ссылок */
+    }
+
+    form {
+        width: 100%; /* Максимальная ширина формы */
+        padding: 15px; /* Уменьшаем отступы */
+    }
+
+    input[type="text"], input[type="email"], input[type="password"] {
+        font-size: 12px; /* Еще меньше шрифт для ввода */
+        padding: 10px; /* Уменьшаем внутренние отступы */
+    }
+
+    button {
+        padding: 10px; /* Уменьшаем внутренние отступы */
+    }
+
+    main h2 {
+        font-size: 24px; /* Уменьшаем заголовок */
+    }
+
+    main p, main ul li {
+        font-size: 14px; /* Снижаем размер текста */
+    }
+
+    footer {
+        font-size: 12px; /* Самый маленький размер текста в подвале */
+    }
+}

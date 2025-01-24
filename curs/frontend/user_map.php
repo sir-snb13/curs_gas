@@ -33,7 +33,6 @@ session_start();
             </ul>
         </nav>
     </header>
-
     <main>
         <h2>Карта заправок</h2>
         <div class="district-selector">
@@ -72,7 +71,7 @@ session_start();
         <p>© 2025 Заправки Москвы. Все права защищены</p>
     </footer>
 
-    <script src="/curs/frontend/js/map_script.js"></script>
+    <script src="/curs/frontend/js/user_map_script.js"></script>
     <script src="/curs/frontend/js/script.js"></script>
 </body>
 </html>
